@@ -1,0 +1,10 @@
+mbeanDomainName: geotab.dna.dataplatform.source.gcs.connector
+sourceGroup: source
+metrics:
+  - record_total
+  - file_process_success_total
+  - file_process_failure_total
+  - file_process_skip_total
+  - pubsub_acked_file_total
+  - file_record_total
+

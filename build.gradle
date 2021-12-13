@@ -1,0 +1,196 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven {
+            url "http://packages.confluent.io/maven/"
+        }
+        maven {
+            url = uri("https://jitpack.io")
+        }
+    }
+}
+plugins {
+    id 'java'
+    id "com.gorylenko.gradle-git-properties" version "2.2.4" apply true
+    id "net.thauvin.erik.gradle.semver" version "1.0.4" apply true
+    id "com.github.imflog.kafka-schema-registry-gradle-plugin" version "1.2.0"
+    id 'com.github.johnrengelman.shadow' version '6.1.0' apply false
+    id "com.google.cloud.artifactregistry.gradle-plugin" version "2.1.4" apply false
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+
+    withJavadocJar()
+    withSourcesJar()
+}
+repositories {
+    mavenLocal()
+    mavenCentral()
+    // For kafka-avro-serializer and kafka-connect-avro-converter
+    maven {
+        url "https://packages.confluent.io/maven"
+    }
+}
+Properties props = new Properties()
+def propFile = file('version.properties')
+def versionCode = ''
+if (propFile.canRead()) {
+    props.load(new FileInputStream(propFile))
+    if (props != null && props.containsKey('version.semver')) {
+        versionCode = props['version.semver'].toString()
+    }
+}
+
+allprojects {
+    group 'com.geotab.dna'
+    version versionCode
+}
+
+ext {
+    set('apacheAvroVersion', '1.9.2')
+    set('apacheCommonsVersion', '3.10')
+    set('apacheKafkaClientVersion', '2.7.0')
+    set('kafkaVersion', '2.5.0')
+    set('cucumberVersion', '4.7.4')
+    set('fasterxmlJacksonVersion', '2.10.2')
+    set('googleCloudVersion', '1.107.0')
+    set('googleCloudNioVersion', '0.122.14')
+    set('googleCloudContainerVersion', '1.0.4')
+    set('googleGuavaVersion', '30.1.1-jre')
+    set('googleCloudPubsubVersion', '1.114.2')
+    set('googleCloudStorageVersion', '2.1.0')
+    set('protobufJavaVersion', '3.17.3')
+    set('googleCloudLoggingVersion', '0.121.11-alpha')
+    set('googleCloudLibBomVersion', '22.0.0')
+    set('junitVersion', '5.7.0')
+    set('confluentPlatformVersion', '6.1.1')
+    set('debeziumVersion', '0.6.1')
+    set('slf4jVersion', '1.7.30')
+    set('javaxValidationVersion', '2.0.1.Final')
+    set('kafkaAvroSerializerVersion', '6.1.1')
+    set('kafkaSchemaRegistryVersion', '6.1.1')
+    set('lombokVersion', '1.18.12')
+    set('mockitoVersion', '3.6.28')
+    set('restAssuredVersion', '4.1.2')
+    set('swaggerVersion', '2.9.2')
+    set('springBootVersion', '2.4.1')
+    set('springKafkaVersion', '2.6.4')
+    set('springTxVersion', '5.3.2')
+    set('springRetryVersion', '1.3.0')
+    set('./gradlew app:dependencies', '1.12.5')
+    set('unirestVersion', '3.11.09')
+}
+
+configurations {
+    integrationTestImplementation.extendsFrom testImplementation
+    integrationTestRuntime.extendsFrom testRuntimeClasspath
+}
+
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'checkstyle'
+    apply plugin: 'jacoco'
+    apply plugin: 'maven-publish'
+    apply plugin: 'com.github.johnrengelman.shadow'
+    apply plugin: 'com.google.cloud.artifactregistry.gradle-plugin'
+    def homePath = System.properties['user.home']
+    def googleCredentialPath = System.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+
+    checkstyle {
+        toolVersion "8.29"
+        getConfigDirectory().set(rootProject.file("config/checkstyle/"))
+    }
+
+    shadowJar {
+        archiveClassifier.set('')
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        // For kafka-avro-serializer and kafka-connect-avro-converter
+        maven {
+            url "https://packages.confluent.io/maven"
+        }
+    }
+    dependencies {
+        compileOnly "org.apache.kafka:connect-api:$kafkaVersion"
+        compileOnly "org.apache.kafka:connect-runtime:$kafkaVersion"
+        implementation("com.google.cloud:google-cloud-storage:${googleCloudStorageVersion}") {
+            exclude group: "com.google.guava", module: "guava"
+        }
+        implementation platform("com.google.cloud:libraries-bom:${googleCloudLibBomVersion}")
+        implementation "org.reflections:reflections:0.9.12"
+        implementation "io.confluent:kafka-schema-registry-client:6.1.1"
+        implementation "io.confluent:kafka-connect-avro-converter:6.1.1"
+        implementation group: 'io.confluent', name: 'kafka-protobuf-serializer', version: '6.1.1'
+        implementation group: 'io.confluent', name: 'kafka-protobuf-provider', version: '6.1.1'
+
+        implementation group: 'io.confluent', name: 'kafka-connect-protobuf-converter', version: '6.1.1'
+        compile 'org.javatuples:javatuples:1.2'
+        implementation('com.github.javafaker:javafaker:0.14') { exclude module: 'org.yaml' }
+        implementation group: 'org.yaml', name: 'snakeyaml', version: '1.17'
+        implementation "io.debezium:debezium-core:$debeziumVersion"
+        implementation "com.google.guava:guava:${googleGuavaVersion}"
+        implementation "com.google.cloud:google-cloud-nio:${googleCloudNioVersion}"
+        implementation "com.google.cloud:google-cloud-container:${googleCloudContainerVersion}"
+        implementation "com.google.cloud:google-cloud-pubsub:${googleCloudPubsubVersion}"
+        implementation "com.google.protobuf:protobuf-java:${protobufJavaVersion}"
+        implementation "org.projectlombok:lombok:${lombokVersion}"
+        implementation "org.slf4j:slf4j-api:$slf4jVersion"
+        compile 'com.opencsv:opencsv:5.4'
+        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+        implementation "org.apache.avro:avro:${apacheAvroVersion}"
+        implementation "com.google.cloud:google-cloud-logging-logback:${googleCloudLoggingVersion}"
+        testImplementation "org.hamcrest:hamcrest:2.1"
+        testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+        testImplementation "org.mockito:mockito-inline:${mockitoVersion}"
+        testImplementation "org.mockito:mockito-core:${mockitoVersion}"
+        testImplementation "org.projectlombok:lombok:${lombokVersion}"
+        testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+        testImplementation "org.apache.kafka:connect-api:$kafkaVersion"
+        testImplementation "org.apache.kafka:connect-runtime:$kafkaVersion"
+        testImplementation "org.apache.kafka:connect-json:$kafkaVersion"
+        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+
+        testRuntimeOnly "org.slf4j:slf4j-log4j12:$slf4jVersion"
+        testImplementation "org.xerial.snappy:snappy-java:1.1.7.5"
+        testImplementation "com.github.luben:zstd-jni:1.4.5-4"
+        testImplementation("org.apache.parquet:parquet-tools:1.11.1") {
+            exclude group: "org.slf4j", module: "slf4j-api"
+        }
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.enabled true
+            html.enabled false
+        }
+    }
+
+    task copyToLib(type: Copy) {
+        from configurations.default
+        into "$buildDir/output/lib"
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+    task codeCheck(type: Checkstyle) {
+        dependsOn check
+        dependsOn test
+
+        reports {
+            xml.enabled true
+            html.enabled true
+            html.stylesheet resources.text.fromFile('../config/xsl/checkstyle-csv.xsl')
+        }
+    }
+}
