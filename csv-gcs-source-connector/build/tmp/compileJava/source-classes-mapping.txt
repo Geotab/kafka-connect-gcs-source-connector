@@ -1,0 +1,14 @@
+com/geotab/dna/dataplatform/kafka/connect/source/gcs/config/CSVBlobReaderConfig.java
+ com.geotab.dna.dataplatform.kafka.connect.source.gcs.config.CSVBlobReaderConfig
+com/geotab/dna/dataplatform/kafka/connect/source/gcs/utils/parsers/TimeTypeParser.java
+ com.geotab.dna.dataplatform.kafka.connect.source.gcs.utils.parsers.TimeTypeParser
+com/geotab/dna/dataplatform/kafka/connect/source/gcs/reader/CSVRowBlobReader.java
+ com.geotab.dna.dataplatform.kafka.connect.source.gcs.reader.CSVRowBlobReader
+com/geotab/dna/dataplatform/kafka/connect/source/gcs/CSVGcsSourceTask.java
+ com.geotab.dna.dataplatform.kafka.connect.source.gcs.CSVGcsSourceTask
+com/geotab/dna/dataplatform/kafka/connect/source/gcs/utils/parsers/TimestampTypeParser.java
+ com.geotab.dna.dataplatform.kafka.connect.source.gcs.utils.parsers.TimestampTypeParser
+com/geotab/dna/dataplatform/kafka/connect/source/gcs/CSVGcsSourceConnector.java
+ com.geotab.dna.dataplatform.kafka.connect.source.gcs.CSVGcsSourceConnector
+com/geotab/dna/dataplatform/kafka/connect/source/gcs/utils/parsers/DateTypeParser.java
+ com.geotab.dna.dataplatform.kafka.connect.source.gcs.utils.parsers.DateTypeParser

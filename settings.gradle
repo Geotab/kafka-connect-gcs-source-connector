@@ -1,0 +1,4 @@
+rootProject.name = 'Kafka-Connect-GCS-Source-Connector'
+include 'base-gcs-source-connector'
+include 'csv-gcs-source-connector'
+
