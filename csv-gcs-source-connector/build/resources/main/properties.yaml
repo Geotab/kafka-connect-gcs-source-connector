@@ -1,5 +1,0 @@
-blobReaderClass: "com.geotab.dna.dataplatform.kafka.connect.source.gcs.reader.CSVRowBlobReader"
-fileScannerClass: "com.geotab.dna.dataplatform.kafka.connect.source.gcs.scanner.PubsubTopicSyncScanner"
-cleanupStrategy: ARCHIVE_TO_BUCKET
-pubSubBackOffTime: 10
-pubSubMessageMaxMessages: 10
