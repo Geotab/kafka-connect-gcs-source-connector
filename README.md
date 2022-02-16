@@ -1,16 +1,11 @@
-# Kafka-Connect-GCS-Source-Connector
-Geotab Kafka Connect GCS source connector
- What is this csv source connector does:
-1. Designed and developed based on open-sourced kafka-connect framework
-2. Load csv files from Google Cloud Storage Buckets to Kafka with scalability and reliability
+# Geotab Kafka Connect GCS Source Connector
+
+What does this csv source connector do:
+1. Designed and developed based on open-sourced kafka-connect framework.
+2. Load csv files from Google Cloud Storage Buckets to Kafka with scalability and reliability.
 
 
-Benefits from open sourcing this:
-1. contribute to the kafka opensource community
-2. get feedback from the developers in the community and enhance the codebase
-3. Geotab branding in Big Data Technologies
-
-### Introduction
+## Introduction
    
 This Kafka Connect GCS source connector provides the capability to read csv files from a GCS bucket
 - Each new file pushed into the bucket will be monitored by Google Pub/Sub service
@@ -18,7 +13,7 @@ This Kafka Connect GCS source connector provides the capability to read csv file
 - The csv connectors can be deployed with simple create request
 - The base source connector can be extended to other data format by customizing the `blobreader`
 
-### Installation 
+## Installation 
 Please follow the steps for self-managed connectors on the Confluent site `https://docs.confluent.io/home/connect/self-managed/install.html`
 Since this source connector is not integrated with confluent hub, it only supports manually installation.
 Install Connector:
@@ -58,7 +53,7 @@ This connector can be deployed on Kubernetes for auto-scaling and rebalance.
 }
 ```
 
-### Configs
+## Configs
 
 | Configuration Name | Type | Default value | Description |
 | ------------- | ------------- |------------- |------------- |
@@ -80,7 +75,7 @@ This connector can be deployed on Kubernetes for auto-scaling and rebalance.
 | csv.ignore.quotations| boolean| true|Sets the ignore quotations mode - if true, quotations are ignored|
  
 
-### Important
+## Important
 This connector does not try to convert the csv records to a schema. User needs to provide the schema using avro format
  
  
