@@ -78,4 +78,15 @@ This connector can be deployed on Kubernetes for auto-scaling and rebalance.
 ## Important
 This connector does not try to convert the csv records to a schema. User needs to provide the schema using avro format
  
- 
+## Contributors
+Geotabbers and ex-Geotabbers:
+[Mark](https://github.com/markma0215) /
+[Lennon](https://github.com/LemonU) /
+[Charan](https://github.com/charan478) /
+[Ying](https://github.com/outerforce) /
+[Wenyang](https://github.com/wyanglau) /
+[Nate Qu](https://github.com/tsuxia) /
+[Gerry](https://github.com/gerry-wu)
+
+
+
